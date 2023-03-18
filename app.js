@@ -5,6 +5,8 @@ const app = express();
 const PORT = 8000;
 const insultsJSON = require('./insults.json');
 
+const { filterPlays } = require('./utils.js')
+
 app.use(express.json); // Translate everything coomesin the body to json
 
 app.get('/', (request, response )=>{
@@ -39,8 +41,16 @@ app.post('/api/insults', (request, response)=>{
 });
 
 
-app.get('/api/insults/:play', ()=>{
-    
+app.get('/api/insults/:play', (request, response)=>{
+    const play = request.params.play;
+    console.log(request.params)
+    const result = filterPlays(insultsJSON.insults, play);
+
+    const resObj = {
+        sucess: true,
+        insults: result
+    }
+    response.json(resObj);
 });
 
 app.listen(PORT, ()=>{
